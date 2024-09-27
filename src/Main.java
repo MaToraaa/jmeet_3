@@ -38,7 +38,7 @@ public class Main {
 //        lakukan perulangan apabila user ingin lanjut
         do {
 
-            // Pilih bangun datar dengan melakukan mapping pada data yang sudah tersedia
+            // mengambil nama bangun dengan melakukan mapping pada data yang sudah tersedia
             String[] bangunOptions = Arrays.stream(data).map(b -> b.nama).toArray(String[]::new);
 //            Menampilkan modal dialog agar user dapat menentukan pilihan
             int bangunTerpilih = JOptionPane.showOptionDialog(null, "Pilih Bangun:", "Pilih Bangun",
@@ -50,7 +50,7 @@ public class Main {
 //            Mengambil index bangun dari yang dipilih user
             BangunDatar selectedBangun = data[bangunTerpilih];
 
-//            Melakukan Stream data lagi yang kemudian difilter agar mendapatkan rumus yang tersedia
+//            Melakukan pencocokan apakah rumus tersedia pada data atau tidak, jika iya maka disimpan dalam array baru dan nantinya ditampilkan pada user
             String[] finalRumusOptions = Arrays.stream(new String[]{"Luas", "Keliling", "Volume"})
                     .filter(r -> (r.equals("Luas") && selectedBangun.luas != null)
                             || (r.equals("Keliling") && selectedBangun.keliling != null)
@@ -73,7 +73,7 @@ public class Main {
             String[] deskripsiInputs = selectedRumus.deskripsiInput();
             double[] inputs = new double[deskripsiInputs.length];
 
-            // Minta input sesuai dengan deskripsi
+            // Meminta setiap input yang sesuai dengan deskripsi
             for (int i = 0; i < deskripsiInputs.length; i++) {
                 String inputStr = JOptionPane.showInputDialog("Masukkan " + deskripsiInputs[i] + " untuk " + finalRumusOptions[rumusChoice] + " " + selectedBangun.nama);
                 inputs[i] = Double.parseDouble(inputStr); // Konversi input ke double
