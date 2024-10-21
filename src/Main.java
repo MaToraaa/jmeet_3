@@ -1,4 +1,5 @@
 import javax.swing.JOptionPane;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 //Disini saya membuat type interface untuk rumus yang nantinya akan menyimpan rumus dan deskripsi pada rumusBangun
@@ -16,6 +17,13 @@ class BangunDatar {
         this.luas = luas;
         this.keliling = keliling;
         this.volume = volume;
+    }
+    public String[] rumusAvailable() {
+        ArrayList<String> fieldNames = new ArrayList<>();
+        if (luas != null) fieldNames.add("Luas");
+        if (keliling != null) fieldNames.add("Keliling");
+        if (volume != null) fieldNames.add("Volume");
+        return fieldNames.toArray(new String[0]);
     }
 }
 
@@ -51,18 +59,14 @@ public class Main {
             BangunDatar selectedBangun = data[bangunTerpilih];
 
 //            Melakukan pencocokan apakah rumus tersedia pada data atau tidak, jika iya maka disimpan dalam array baru dan nantinya ditampilkan pada user
-            String[] finalRumusOptions = Arrays.stream(new String[]{"Luas", "Keliling", "Volume"})
-                    .filter(r -> (r.equals("Luas") && selectedBangun.luas != null)
-                            || (r.equals("Keliling") && selectedBangun.keliling != null)
-                            || (r.equals("Volume") && selectedBangun.volume != null))
-                    .toArray(String[]::new);
+            String [] rumusOption = selectedBangun.rumusAvailable();
 //          Menampilkan pilihan rumus yang tadinya sudah difilter
             int rumusChoice = JOptionPane.showOptionDialog(null, "Pilih Rumus:", "Pilih Rumus",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, finalRumusOptions, finalRumusOptions[0]);
-//            bila rumus sudah dipilih maka tutup dialog
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, rumusOption,0 );
+//          bila rumus sudah dipilih maka tutup dialog
             if (rumusChoice == JOptionPane.CLOSED_OPTION) return;
 //          mengambil kondisi dari apa yang user pilih yang kemudian mereturn rumus yang sesuai
-            Rumus selectedRumus = switch (finalRumusOptions[rumusChoice]) {
+            Rumus selectedRumus = switch (rumusOption[rumusChoice]) {
                 case "Luas" -> selectedBangun.luas;
                 case "Keliling" -> selectedBangun.keliling;
                 case "Volume" -> selectedBangun.volume;
@@ -75,7 +79,7 @@ public class Main {
 
             // Meminta setiap input yang sesuai dengan deskripsi
             for (int i = 0; i < deskripsiInputs.length; i++) {
-                String inputStr = JOptionPane.showInputDialog("Masukkan " + deskripsiInputs[i] + " untuk " + finalRumusOptions[rumusChoice] + " " + selectedBangun.nama);
+                String inputStr = JOptionPane.showInputDialog("Masukkan " + deskripsiInputs[i] + " untuk " + rumusOption[rumusChoice] + " " + selectedBangun.nama);
                 inputs[i] = Double.parseDouble(inputStr); // Konversi input ke double
             }
 
